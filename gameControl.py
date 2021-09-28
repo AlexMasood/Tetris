@@ -1,4 +1,5 @@
 import pygame
+from pygame.constants import KEYDOWN
 from board import Board
 from shape import Shape
 import sys
@@ -28,31 +29,34 @@ class GameControl():
         shape = Shape(width)
         shape.x = 0
         shape.y = 0
+        loopNum = 0
         while not exitGame:
-            for event in pygame.event.get():
-                if (newShape == True):
-                    shape.popShapeBag()
-                    newShape = False
+            if (newShape == True):
+                shape.popShapeBag()
+                newShape = False
+            if(loopNum>250):#game loops until shape moves down
+                loopNum = 0
                 shape.moveShapeDown()
-                if (pygame.key.get_pressed()[pygame.K_LEFT]):
-                    #check if legal
-                    shape.moveShapeLeft()
-                    print("left")
+            loopNum+=1
+            for event in pygame.event.get():
                 
-                if (pygame.key.get_pressed()[pygame.K_RIGHT]):
-                    #check if legal
-                    shape.moveShapeRight()
-                    print("right")
-                if (pygame.key.get_pressed()[pygame.K_UP]):
-                    #check if legal
-                    shape.currentShape = shape.rotateShape(shape.currentShape)
-                if (self.board.collisionCheck(shape)):
-                    self.board.addPlacedShapesToBoard(shape)
-                    newShape = True
-                time.sleep(0.1)
-                self.surface.fill((0,0,0))
-                self.board.drawBoard(self.surface)
-                shape.drawShape(self.surface)
-                pygame.display.flip()
+                if (event.type == KEYDOWN):
+                    if (pygame.key.get_pressed()[pygame.K_LEFT]):
+                        #check if legal
+                        shape.moveShapeLeft()
+                    if (pygame.key.get_pressed()[pygame.K_RIGHT]):
+                        #check if legal
+                        shape.moveShapeRight()
+                    if (pygame.key.get_pressed()[pygame.K_UP]):
+                        #check if legal
+                        shape.currentShape = shape.rotateShape(shape.currentShape)
+            if (self.board.collisionCheck(shape)):
+                self.board.addPlacedShapesToBoard(shape)
+                newShape = True          
+
+            self.surface.fill((0,0,0))
+            self.board.drawBoard(self.surface)
+            shape.drawShape(self.surface)
+            pygame.display.flip()
 GameControl().gameLoop()
 
