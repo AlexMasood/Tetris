@@ -34,7 +34,7 @@ class GameControl():
             if (newShape == True):
                 shape.popShapeBag()
                 newShape = False
-            if(loopNum>250):#game loops until shape moves down
+            if(loopNum>500):#game loops until shape moves down
                 loopNum = 0
                 shape.moveShapeDown()
             loopNum+=1
@@ -50,12 +50,19 @@ class GameControl():
                     if (pygame.key.get_pressed()[pygame.K_UP]):
                         #check if legal
                         shape.currentShape = shape.rotateShape(shape.currentShape)
+                    if (pygame.key.get_pressed()[pygame.K_SPACE]):
+                        while(not(self.board.collisionCheck(shape))):
+                            shape.moveShapeDown()
+                        
+                        self.board.addPlacedShapesToBoard(shape)
+                        newShape = True  
             if (self.board.collisionCheck(shape)):
                 self.board.addPlacedShapesToBoard(shape)
                 newShape = True          
 
-            self.surface.fill((0,0,0))
-            self.board.drawBoard(self.surface)
+            if(loopNum%40 == 0):
+                self.surface.fill((0,0,0))
+                self.board.drawBoard(self.surface)
             shape.drawShape(self.surface)
             pygame.display.flip()
 GameControl().gameLoop()
