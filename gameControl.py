@@ -45,7 +45,7 @@ class GameControl():
                     print("right")
                 if (pygame.key.get_pressed()[pygame.K_UP]):
                     #check if legal
-                    shape.currentShape = shape.rotateShape(shape)
+                    shape.currentShape = shape.rotateShape(shape.currentShape)
                 if (self.board.collisionCheck(shape)):
                     self.board.addPlacedShapesToBoard(shape)
                     newShape = True
