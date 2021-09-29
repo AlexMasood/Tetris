@@ -9,6 +9,7 @@ class Board:
         self.board = np.zeros((self.height,self.width))
         self.Colours = Colours().returnList()
         self.currentShape = None
+        self.rowsCleared = 0
     
     def setCurrentShape(self,shape):
         self.currentShape = shape
@@ -30,6 +31,11 @@ class Board:
     def clearRow(self,row):
         self.board = np.delete(self.board, row, 0)
         self.board = np.insert(self.board, 0, np.zeros(10),0)
+        self.rowsCleared+=1
+    
+    def toppleCheck(self):
+        if any(self.board[0]):
+            return True
     
     def addPlacedShapesToBoard(self,shape):
         shapeData = shape.getShapeData()

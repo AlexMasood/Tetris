@@ -67,11 +67,14 @@ class GameControl():
                 newShape = True
             
             self.board.rowCheck()
-
+            if(self.board.toppleCheck()):
+                exitGame = True
             if(loopNum%40 == 0):
                 self.surface.fill((0,0,0))
                 self.board.drawBoard(self.surface)
             shape.drawShape(self.surface)
             pygame.display.flip()
+        print("Rows cleared " +str(self.board.rowsCleared))
+        return self.board.rowsCleared
 GameControl().gameLoop()
 
