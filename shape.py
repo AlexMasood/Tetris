@@ -69,6 +69,24 @@ class Shape():
     def moveShapeUp(self):
         self.y -=1
     
+    
+    def getHeight(self,shapeData):
+        height=0
+        for row in shapeData:
+            if any(row):
+                break
+            else:
+                height+=1
+        return height
+
+    def getLeftHeight(self,shapeData):
+        shapeDataLeft = self.rotateShape(shapeData)
+        return self.getHeight(shapeDataLeft)
+    
+    def getRightHeight(self,shapeData):
+        shapeDataRight = self.undoRotation(shapeData)
+        return self.getHeight(shapeDataRight)
+
     def drawShape(self,surface):
         xIndex = 0
         yIndex = 0
@@ -82,22 +100,13 @@ class Shape():
                 xIndex += 1
             xIndex = 0
             yIndex +=1
-            
-        #self.y = 8
-        """posX = 0
-        posY = 0
-        for row in self.currentShape:
-            for block in row:
-                px = self.x + posX
-                py = self.y + posY
-                if block != 0:
-                    pygame.draw.rect(surface,self.Colours[block-1], pygame.Rect(px,py,20,20))
-                    pygame.draw.rect(surface, self.Colours[8], pygame.Rect(px,py,20,20),1)
-                posX += 1
-            posX = 0
-            posY +=1"""
 
-    def test(self):
-        pass
-#s = Shape(10)
-
+    def test(self,shapeData):
+        height=0
+        shapeDaya = self.rotateShape(shapeData)
+        for row in shapeDaya:
+            if any(row):
+                break
+            else:
+                height+=1
+        return height

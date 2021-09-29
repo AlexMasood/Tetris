@@ -20,7 +20,7 @@ class Board:
         return (self.width)
 
     def rowCheck(self):
-        for row in range(0,len(self.board)-1):
+        for row in range(0,len(self.board)):
             if 0 in self.board[row]:
                 pass
                 
@@ -46,15 +46,15 @@ class Board:
             posX = 0
             posY +=1
     
-    def collisionCheck(self,shape):
+    def collisionCheck(self,shape,xIncrement,yIncrement):
         shapeData = shape.getShapeData()
         x,y = shape.getPosition()
         posX = 0
         posY = 0
         for row in shapeData:
             for block in row:
-                px = x + posX
-                py = y + 1 + posY
+                px = x + posX + xIncrement
+                py = y + posY + yIncrement
                 try:
                     if block != 0 and self.board[py][px] != 0:
                         return True
@@ -64,6 +64,11 @@ class Board:
             posX = 0
             posY +=1
 
+
+    def leftWallCollisionCheck(self,shape):
+        #get left height
+        pass
+        
     def drawBoard(self,surface):
         index = 0
         for row in self.board:
@@ -75,11 +80,3 @@ class Board:
                     pygame.draw.rect(surface, self.Colours[8], pygame.Rect(x,y,20,20),1)
                 index += 1
     
-
-
-    def func(self):
-        print(self.board)
-        self.board = np.insert(self.board, 23, np.array([1,1,1,1,1,1,1,1,1,1]),0)
-        print(self.board)
-        self.rowCheck()
-        print(self.board)

@@ -42,23 +42,31 @@ class GameControl():
                 
                 if (event.type == KEYDOWN):
                     if (pygame.key.get_pressed()[pygame.K_LEFT]):
-                        #check if legal
-                        shape.moveShapeLeft()
+                        if(not(self.board.collisionCheck(shape,-1,0)) and ((shape.x + shape.getLeftHeight(shape.currentShape))>0)):#check if legal
+                            shape.moveShapeLeft()
+
                     if (pygame.key.get_pressed()[pygame.K_RIGHT]):
-                        #check if legal
-                        shape.moveShapeRight()
+                        if(not(self.board.collisionCheck(shape,1,0)) and ((shape.x - shape.getRightHeight(shape.currentShape))<10)):#check if legal
+                            shape.moveShapeRight()
+
                     if (pygame.key.get_pressed()[pygame.K_UP]):
-                        #check if legal
                         shape.currentShape = shape.rotateShape(shape.currentShape)
+                        if(self.board.collisionCheck(shape,0,0)):#check if legal
+                            shape.currentShape = shape.undoRotation(shape.currentShape)
+                        elif ((shape.x - shape.getRightHeight(shape.currentShape))>10) or ((shape.x + shape.getLeftHeight(shape.currentShape))<0):
+                            shape.currentShape = shape.undoRotation(shape.currentShape)
+
                     if (pygame.key.get_pressed()[pygame.K_SPACE]):
-                        while(not(self.board.collisionCheck(shape))):
+                        while(not(self.board.collisionCheck(shape,0,1))):
                             shape.moveShapeDown()
-                        
                         self.board.addPlacedShapesToBoard(shape)
-                        newShape = True  
-            if (self.board.collisionCheck(shape)):
+                        newShape = True
+
+            if (self.board.collisionCheck(shape,0,1)):
                 self.board.addPlacedShapesToBoard(shape)
-                newShape = True          
+                newShape = True
+            
+            self.board.rowCheck()
 
             if(loopNum%40 == 0):
                 self.surface.fill((0,0,0))
