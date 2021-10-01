@@ -21,12 +21,15 @@ class Board:
         return (self.width)
 
     def rowCheck(self):
+        lines = 0
         for row in range(0,len(self.board)):
             if 0 in self.board[row]:
                 pass
                 
             else:
                 self.clearRow(row)
+                lines+=1
+        return lines
     
     def clearRow(self,row):
         self.board = np.delete(self.board, row, 0)
