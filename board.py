@@ -69,11 +69,6 @@ class Board:
                     return True
             posX = 0
             posY +=1
-
-
-    def leftWallCollisionCheck(self,shape):
-        #get left height
-        pass
         
     def drawBoard(self,surface):
         index = 0

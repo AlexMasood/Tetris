@@ -19,7 +19,7 @@ class Shape():
         self.blockSize = 20
         self.Colours = Colours().returnList()
         self.width = width
-        self.x = (self.width-2)//2
+        self.x = 0#(self.width-2)//2
         self.y = 0
         self.dx = 0
         self.dy = 1
@@ -34,12 +34,15 @@ class Shape():
 
     def getShapeData(self):
         return self.currentShape
+    
+    def setShapeData(self,shapeData):
+        self.currentShape = shapeData
 
     def getPosition(self):
         return self.x,self.y
 
     def resetShape(self):
-        self.x = 0#(self.width-2)//2
+        self.x = 4 - self.getLeftHeight(self.currentShape)#(self.width-2)//2
         self.y = 0
         self.dx = 0
         self.dy = 1
@@ -100,13 +103,3 @@ class Shape():
                 xIndex += 1
             xIndex = 0
             yIndex +=1
-
-    def test(self,shapeData):
-        height=0
-        shapeDaya = self.rotateShape(shapeData)
-        for row in shapeDaya:
-            if any(row):
-                break
-            else:
-                height+=1
-        return height
