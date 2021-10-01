@@ -108,13 +108,16 @@ class Shape():
     def drawNextShape(self,surface,width,height):
         xIndex = 0
         yIndex = 0
-        offset = 0
+        xOffset = 0
+        yOffset = 0
         if self.shapePointerBag[0] in [0,1,3,4]:
-            offset = 1
+            xOffset = 1
+        if (self.shapePointerBag[0] == 2):
+            yOffset = 1
         for row in self.getNextShape():
             for block in row:
-                x = ((xIndex + (1 + offset - self.getLeftHeight(self.getNextShape()))) *20)+ width
-                y = ((1+ yIndex) * 20)
+                x = ((xIndex + (1 + xOffset - self.getLeftHeight(self.getNextShape()))) *20)+ width
+                y = ((2 - yOffset + yIndex) * 20)
                 if block != 0:
                     pygame.draw.rect(surface,self.Colours[block-1], pygame.Rect(x,y,20,20))
                     pygame.draw.rect(surface, self.Colours[8], pygame.Rect(x,y,20,20),1)

@@ -12,16 +12,31 @@ class GameControl():
     def createBoard(self):
         self.board = Board()
 
+    def setUpFont(self):
+        return pygame.font.SysFont(None, 24)
+        
+        
+    
 
     def gameLoop(self):
+        pygame.init()
         exitGame = False
         newShape = True
+
+        #board and screen setup
         self.createBoard()
-        self.surface = self.setupScreen()
+        surface = self.setupScreen()
         gameBoard = self.board
-        width  = gameBoard.getDimensions()[0]
+        width,height  = gameBoard.getDimensions()
         shape = Shape(width)
         loopNum = 0
+        clearedRows = 0
+
+        #font setup
+        font = self.setUpFont()
+        nextText = font.render('Next', True, (255,255,255))
+        linesText = font.render('Lines:  0', True, (255,255,255))
+
         while not exitGame:
             if (newShape == True):
                 shape.popShapeBag()
@@ -53,20 +68,30 @@ class GameControl():
                             shape.moveShapeDown()
                         gameBoard.addPlacedShapesToBoard(shape)
                         newShape = True
+            
             if(loopNum>450):
                 if (gameBoard.collisionCheck(shape,0,1)):
                     gameBoard.addPlacedShapesToBoard(shape)
                     newShape = True
             
-            gameBoard.rowCheck() 
+
+            gameBoard.rowCheck()
+
+            if(clearedRows != gameBoard.rowsCleared):
+                clearedRows = gameBoard.rowsCleared
+                linesText = font.render('Lines:  '+str(clearedRows), True, (255,255,255))
+
             if(gameBoard.toppleCheck()):
                 exitGame = True
-            if(loopNum%40 == 0):
-                self.surface.fill((0,0,0))
-                gameBoard.drawBoard(self.surface)
-                pygame.draw.rect(self.surface, (102,102,102), (width,0,100,self.board.getDimensions()[1]))
-                shape.drawNextShape(self.surface,self.board.getDimensions()[0],self.board.getDimensions()[1])
-            shape.drawShape(self.surface)
+            
+            if(loopNum % 40 == 0):
+                surface.fill((0,0,0))
+                gameBoard.drawBoard(surface)
+                pygame.draw.rect(surface, (102,102,102), (width,0,100,height))
+                shape.drawNextShape(surface,width,height)
+                surface.blit(nextText, (width + 35, 5))
+                surface.blit(linesText, (width + 20, 150))
+            shape.drawShape(surface)
             pygame.display.flip()
         print("Rows cleared " +str(gameBoard.rowsCleared))
         return gameBoard.rowsCleared
