@@ -5,7 +5,7 @@ from shape import Shape
 class GameControl():    
     def setupScreen(self):
         width,height = self.board.getDimensions()
-        pygame.display.set_mode((width,height))
+        pygame.display.set_mode((width+100,height))#100 represents the menu to the side of the game board
         screen = pygame.display.get_surface()
         return screen
     
@@ -44,7 +44,7 @@ class GameControl():
                     if (pygame.key.get_pressed()[pygame.K_UP]):#rotate shape
                         shape.setShapeData(shape.rotateShape(shape.getShapeData()))
                         if(gameBoard.collisionCheck(shape,0,0)):#check if legal
-                            shape.SetShapeData(shape.undoRotation(shape.getShapeData()))
+                            shape.setShapeData(shape.undoRotation(shape.getShapeData()))
                         elif ((shape.x - shape.getRightHeight(shape.getShapeData()))>10) or ((shape.x + shape.getLeftHeight(shape.getShapeData()))<0):
                             shape.setShapeData(shape.undoRotation(shape.getShapeData()))
 
@@ -53,17 +53,19 @@ class GameControl():
                             shape.moveShapeDown()
                         gameBoard.addPlacedShapesToBoard(shape)
                         newShape = True
-
-            if (gameBoard.collisionCheck(shape,0,1)):
-                gameBoard.addPlacedShapesToBoard(shape)
-                newShape = True
+            if(loopNum>450):
+                if (gameBoard.collisionCheck(shape,0,1)):
+                    gameBoard.addPlacedShapesToBoard(shape)
+                    newShape = True
             
-            gameBoard.rowCheck()
+            gameBoard.rowCheck() 
             if(gameBoard.toppleCheck()):
                 exitGame = True
             if(loopNum%40 == 0):
                 self.surface.fill((0,0,0))
                 gameBoard.drawBoard(self.surface)
+                pygame.draw.rect(self.surface, (102,102,102), (width,0,100,self.board.getDimensions()[1]))
+                shape.drawNextShape(self.surface,self.board.getDimensions()[0],self.board.getDimensions()[1])
             shape.drawShape(self.surface)
             pygame.display.flip()
         print("Rows cleared " +str(gameBoard.rowsCleared))

@@ -19,10 +19,9 @@ class Shape():
         self.blockSize = 20
         self.Colours = Colours().returnList()
         self.width = width
-        self.x = 0#(self.width-2)//2
+        self.x = 0
         self.y = 0
         self.dx = 0
-        self.dy = 1
 
     def popShapeBag(self):
         self.currentShape = self.shapes[self.shapePointerBag[0]]
@@ -31,6 +30,9 @@ class Shape():
         if (len(self.shapePointerBag)<1):
             self.shapePointerBag = np.arange(len(self.shapes))
             np.random.shuffle(self.shapePointerBag)
+
+    def getNextShape(self):
+        return self.shapes[self.shapePointerBag[0]]
 
     def getShapeData(self):
         return self.currentShape
@@ -42,10 +44,9 @@ class Shape():
         return self.x,self.y
 
     def resetShape(self):
-        self.x = 4 - self.getLeftHeight(self.currentShape)#(self.width-2)//2
+        self.x = 4 - self.getLeftHeight(self.currentShape)
         self.y = 0
         self.dx = 0
-        self.dy = 1
 
     def setAsNext(self):
         self.x = 0
@@ -97,6 +98,23 @@ class Shape():
             for block in row:
                 x = (self.x + xIndex) * 20
                 y = (self.y + yIndex) * 20
+                if block != 0:
+                    pygame.draw.rect(surface,self.Colours[block-1], pygame.Rect(x,y,20,20))
+                    pygame.draw.rect(surface, self.Colours[8], pygame.Rect(x,y,20,20),1)
+                xIndex += 1
+            xIndex = 0
+            yIndex +=1
+    
+    def drawNextShape(self,surface,width,height):
+        xIndex = 0
+        yIndex = 0
+        offset = 0
+        if self.shapePointerBag[0] in [0,1,3,4]:
+            offset = 1
+        for row in self.getNextShape():
+            for block in row:
+                x = ((xIndex + (1 + offset - self.getLeftHeight(self.getNextShape()))) *20)+ width
+                y = ((1+ yIndex) * 20)
                 if block != 0:
                     pygame.draw.rect(surface,self.Colours[block-1], pygame.Rect(x,y,20,20))
                     pygame.draw.rect(surface, self.Colours[8], pygame.Rect(x,y,20,20),1)
